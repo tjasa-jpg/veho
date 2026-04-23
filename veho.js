@@ -53,7 +53,7 @@ let t = 0;
 function frame() {
   t += NOISE_TICK;
 
-  ctx.fillStyle = '#312BCC';
+  ctx.fillStyle = '#6C36FF';
   ctx.fillRect(0, 0, CW, CH);
 
   for (let i = 0; i < N; i++) {
