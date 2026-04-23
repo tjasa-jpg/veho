@@ -39,13 +39,11 @@ wrap.addEventListener('mousemove', e => {
 });
 wrap.addEventListener('mouseleave', () => { mOn = false; mx = -9999; my = -9999; });
 
-// Key balance: drift is visible but helix shape stays clear
 const DAMP        = 0.97;
-const HOME_PULL   = 0.006;  // stronger than before — keeps helix readable
-const DRIFT_AMP   = 0.10;   // gentle bee-wander — noticeable but not chaotic
+const HOME_PULL   = 0.006;
+const DRIFT_AMP   = 0.10;
 const NOISE_TICK  = 0.0006;
 const SPEED_VAR   = 0.7;
-// Smaller, tighter explosion
 const EXPLODE_RAD = 130;
 const EXPLODE_F   = 16;
 const R_SCALE     = 0.52;
@@ -55,15 +53,10 @@ let t = 0;
 function frame() {
   t += NOISE_TICK;
 
-  const bg = ctx.createRadialGradient(CW*0.35, CH*0.3, 0, CW*0.5, CH*0.5, CW*0.75);
-  bg.addColorStop(0,    '#0d2d4a');
-  bg.addColorStop(0.45, '#081e33');
-  bg.addColorStop(1,    '#030d1a');
-  ctx.fillStyle = bg;
+  ctx.fillStyle = '#312BCC';
   ctx.fillRect(0, 0, CW, CH);
 
   for (let i = 0; i < N; i++) {
-    // Independent bee-drift per particle — 5 unique phases, irrational freq ratios
     const tScale = 1.0 + SPEED_VAR * Math.sin(ph3[i] + t * 0.4);
     const tLocal = t * tScale;
     const fx = (Math.sin(ph1[i] + tLocal * 2.3) * 0.65
@@ -74,11 +67,9 @@ function frame() {
     vx[i] += fx;
     vy[i] += fy;
 
-    // Home spring — firm enough to keep helix visible
     vx[i] += (PTS[i][0] - px[i]) * HOME_PULL;
     vy[i] += (PTS[i][1] - py[i]) * HOME_PULL;
 
-    // Mouse explosion — smaller radius, snappy burst
     if (mOn) {
       const ddx = px[i] - mx;
       const ddy = py[i] - my;
@@ -95,7 +86,6 @@ function frame() {
     px[i] += vx[i];
     py[i] += vy[i];
 
-    // Soft boundary
     if (px[i] < -60)   { px[i] = -60;   vx[i] *= -0.4; }
     if (px[i] > CW+60) { px[i] = CW+60; vx[i] *= -0.4; }
     if (py[i] < -60)   { py[i] = -60;   vy[i] *= -0.4; }
